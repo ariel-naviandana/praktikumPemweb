@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        .calculator {
+            width: 300px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .display {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.5em;
+            text-align: right;
+            border: none;
+            background-color: #e6e6e6;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        button.operator {
+            background-color: #ffc107;
+        }
+
+        button:active {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calculator">
+        <input type="text" class="display" id="display" readonly placeholder="0">
+        <div class="buttons">
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="appendToDisplay('sin')">sin</button>
+            <button onclick="appendToDisplay('cos')">cos</button>
+            <button onclick="appendToDisplay('tan')">tan</button>
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button onclick="appendToDisplay('/')">/</button>
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button onclick="appendToDisplay('*')">*</button>
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button onclick="appendToDisplay('-')">-</button>
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button onclick="calculateSquareRoot()">√</button>
+            <button onclick="appendToDisplay('+')">+</button>
+            <button onclick="calculate()" style="grid-column: span 4;">=</button>
+        </div>
+    </div>
+
+    <script>
+        function appendToDisplay(value) {
+            const display = document.getElementById("display");
+            display.value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById("display").value = '';
+        }
+
+        function calculate() {
+            try {
+                let expression = document.getElementById("display").value;
+                const trigonometricFunctions = ['sin', 'cos', 'tan'];
+                trigonometricFunctions.forEach(func => {
+                    const regex = new RegExp(func + '(\\d+)', 'g');
+                    expression = expression.replace(regex, (match, p1) => {
+                        const value = parseFloat(p1);
+                        if (func === 'sin') return Math.sin(Math.PI / 180 * value);
+                        if (func === 'cos') return Math.cos(Math.PI / 180 * value);
+                        if (func === 'tan') return Math.tan(Math.PI / 180 * value);
+                        return match;
+                    });
+                });
+
+                document.getElementById("display").value = eval(expression);
+            } catch (error) {
+                document.getElementById("display").value = "Error";
+            }
+        }
+
+        function calculateSquareRoot() {
+            try {
+                let value = document.getElementById("display").value;
+                document.getElementById("display").value = Math.sqrt(eval(value));
+            } catch (error) {
+                document.getElementById("display").value = "Error";
+            }
+        }
+    </script>
+</body>
+
+</html>
